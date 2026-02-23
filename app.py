@@ -34,6 +34,7 @@ def help_page():
 
 @app.route("/generate-demo")
 def generate_demo():
+    logs.clear()
     sample_events = [
         "Failed login from 192.168.1.5",
         "Accepted login for admin",
