@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/static/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="sidebar">
+<h2>🛡 SIEM</h2>
+
+<a class="active" href="/">Dashboard</a>
+
+<!-- REAL UPLOAD SYSTEM -->
+<form action="/upload" method="POST" enctype="multipart/form-data">
+<input type="file" name="logfile" required>
+<button type="submit" class="upload-btn">Upload Logs</button>
+</form>
+
+<a href="#" onclick="generateLogs()">Generate Demo</a>
+<a href="/help">Help</a>
+
+</div>
+
+<div class="main">
+
+<h1>Security Dashboard</h1>
+
+<!-- STAT CARDS -->
+<div class="cards">
+
+<button class="card glow-red filter-btn" onclick="filterAlerts('HIGH')">
+High Alerts
+</button>
+
+<button class="card filter-btn" onclick="filterAlerts('MEDIUM')">
+Medium Alerts
+</button>
+
+<button class="card filter-btn" onclick="filterAlerts('LOW')">
+Low Alerts
+</button>
+
+<button class="card filter-btn" onclick="filterAlerts('ALL')">
+Show All
+</button>
+
+</div>
+
+<!-- CHART -->
+<div class="card">
+<canvas id="severityChart"></canvas>
+</div>
+
+<!-- ALERT TABLE -->
+<div class="card">
+<h2>Security Alerts</h2>
+
+<table>
+<tr>
+<th>IP</th>
+<th>Event</th>
+<th>Severity</th>
+</tr>
+
+{% for alert in alerts %}
+<tr>
+<td>{{alert.ip}}</td>
+<td>{{alert.event}}</td>
+<td>
+<span class="badge {{alert.severity|lower}}">
+{{alert.severity}}
+</span>
+</td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+
+</div>
+
+<script>
+function generateLogs(){
+fetch("/generate-demo")
+.then(res=>res.json())
+.then(data=>{
+    location.reload();
+});
+}
+
+const ctx = document.getElementById('severityChart');
+
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['High','Medium','Low'],
+datasets: [{
+data: [5,3,8]
+}]
+},
+options: {
+plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true}}
+}
+});
+
+function filterAlerts(level){
+
+const rows = document.querySelectorAll("table tr");
+
+/* STEP 1 — reset everything first */
+rows.forEach((row, index)=>{
+    if(index === 0) return; // skip header
+    row.style.display = "";
+});
+
+/* STEP 2 — if ALL selected, stop here */
+if(level === "ALL") return;
+
+/* STEP 3 — apply filter */
+rows.forEach((row, index)=>{
+    if(index === 0) return;
+
+    const badge = row.querySelector(".badge");
+    if(!badge) return;
+
+    if(badge.innerText.trim() !== level){
+        row.style.display = "none";
+    }
+});
+}
+
+</script>
+
+</body>
+</html>

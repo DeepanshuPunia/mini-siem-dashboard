@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mini SIEM Help</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>🛡 SIEM</h2>
+
+<a href="/">Dashboard</a>
+<a href="/help" class="active">Help</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<h1>Mini SIEM Help</h1>
+
+<div class="card">
+<h3>What this dashboard does</h3>
+<p>
+Analyzes uploaded logs and assigns severity levels automatically.
+</p>
+</div>
+
+<div class="card">
+<h3>How to use</h3>
+<ul>
+<li>Click Generate Demo to create alerts</li>
+<li>Upload any .log file</li>
+<li>Click High / Medium / Low to filter alerts</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Severity Levels</h3>
+<p>
+HIGH → Failed logins or denied connections<br>
+MEDIUM → Errors or suspicious activity<br>
+LOW → Normal system activity
+</p>
+</div>
+
+</div>
+
+</body>
+</html>
